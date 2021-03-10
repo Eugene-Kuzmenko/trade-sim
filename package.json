@@ -1,0 +1,40 @@
+{
+  "name": "trade-sim",
+  "version": "1.0.0",
+  "description": "Graph based tradesim made for fun",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eugene-Kuzmenko/trade-sim.git"
+  },
+  "keywords": [
+    "trade",
+    "sim",
+    "js",
+    "canvas",
+    "graph",
+    "space",
+    "simulation"
+  ],
+  "author": "Eugene Kuzmenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eugene-Kuzmenko/trade-sim/issues"
+  },
+  "homepage": "https://github.com/Eugene-Kuzmenko/trade-sim#readme",
+  "dependencies": {
+    "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4"
+  },
+  "resolutions": {
+    "@babel/preset-env": "7.13.8"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10"
+  }
+}
