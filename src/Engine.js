@@ -1,9 +1,9 @@
 import { CircleNode } from './nodes';
+import Renderer from './Renderer';
 
 export default class Engine {
-  constructor (doc) {
-    this.canvas = doc.getElementById('main_canvas');
-    this.drawingContext = this.canvas.getContext('2d');
+  constructor (doc, width, height) {
+    this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
     this.nodes = [
       new CircleNode(40, 40),
@@ -12,6 +12,10 @@ export default class Engine {
     ];
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
+  }
+
+  attachToElement(element) {
+    this.renderer.attachToElement(element);
   }
 
   syncCanvasToWindowSize() {
@@ -36,23 +40,13 @@ export default class Engine {
   }
 
   render() {
-    this.drawingContext.save();
-    const halfViewWidth = this.canvas.width * 0.5;
-    const halfViewHeight = this.canvas.height * 0.5;
-    console.log(this.camera);
-    this.drawingContext.fillStyle = 'black';
-    this.drawingContext.fillRect(
-      0, 0, this.canvas.width, this.canvas.height,
-    );
-    this.drawingContext.translate(
-       halfViewWidth - this.camera.x,
-       halfViewHeight - this.camera.y,
-    );
-
-    for (let node of this.nodes) {
-      node.render(this.drawingContext);
-    }
-    this.drawingContext.restore();
+    this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
+      nodes: layer => {
+        for (let node of this.nodes) {
+          node.render(layer);
+        }
+      }
+    });
   }
 
   update() {

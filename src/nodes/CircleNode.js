@@ -4,13 +4,8 @@ export default class CircleNode {
     this.y = y;
   }
 
-  render(context) {
-    context.save();
-    context.fillStyle = 'red';
-    context.beginPath();
-    context.ellipse(this.x, this.y, RADIUS, RADIUS, 0, 0, Math.PI * 2);
-    context.fill();
-    context.restore();
+  render(layer) {
+    layer.drawCircle(this.x, this.y, RADIUS, 'red');
   }
 }
 
