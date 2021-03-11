@@ -1,6 +1,5 @@
 export default class Layer {
   constructor(doc, name, width, height) {
-    console.log(name, width, height)
     this.name = name;
     this.canvas = doc.createElement('canvas');
     this.canvas.height = height;
