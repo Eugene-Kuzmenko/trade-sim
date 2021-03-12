@@ -1,4 +1,5 @@
 import { CircleNode } from './nodes';
+import { Edge } from './edges';
 import Renderer from './render';
 
 export default class Engine {
@@ -9,6 +10,9 @@ export default class Engine {
       new CircleNode(40, 120),
       new CircleNode(-120, 120),
       new CircleNode(-20, -40)
+    ];
+    this.edges =[
+      new Edge(this.nodes[0], this.nodes[1]),
     ];
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
@@ -45,10 +49,19 @@ export default class Engine {
     }
   }
 
+  * _iterEdgeShapes() {
+    for (let edge of this.edges) {
+      yield edge.shape;
+    }
+  }
+
   render() {
     this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
       nodes: layer => {
         layer.render(this._iterNodeShapes());
+      },
+      edges: layer => {
+        layer.render(this._iterEdgeShapes());
       }
     });
   }

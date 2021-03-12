@@ -1,17 +1,24 @@
-import { ShapeTypes, FillTypes } from './enums';
+import { ShapeTypes, FillTypes, StrokeTypes } from './enums';
 
 export default class Layer {
   _shapeDrawers = {
     [ShapeTypes.CIRCLE]: (context, shape) => {
       context.beginPath();
       context.ellipse(shape.x, shape.y, shape.radius, shape.radius, 0, 0, Math.PI * 2);
-      if (shape.fill) {
-        if (shape.fill.type === FillTypes.COLOR) {
-          context.fillStyle = shape.fill.color;
-        }
+      fill(context, shape.fill);
+      stroke(context, shape.stroke);
+    },
+    [ShapeTypes.LINE]: (context, shape) => {
+      console.log(shape);
 
-        context.fill()
+      if (shape.stroke.width) {
+        context.lineWidth = shape.stroke.width;
       }
+
+      context.beginPath();
+      context.moveTo(shape.start.x, shape.start.y);
+      context.lineTo(shape.end.x, shape.end.y);
+      stroke(context, shape.stroke);
     }
   };
 
@@ -57,4 +64,21 @@ export default class Layer {
     this.drawingContext.fill();
     this.drawingContext.restore();
   }
+}
+
+function stroke(context, stroke) {
+  if (!stroke) return;
+  if (stroke.type === StrokeTypes.COLOR) {
+    context.strokeStyle = stroke.color
+  }
+  context.stroke()
+}
+
+function fill(context, fill) {
+  if (!fill) return;
+  if (fill.type === FillTypes.COLOR) {
+    context.fillStyle = fill.color;
+  }
+
+  context.fill()
 }
