@@ -13,6 +13,8 @@ export default class Engine {
     ];
     this.edges =[
       new Edge(this.nodes[0], this.nodes[1]),
+      new Edge(this.nodes[0], this.nodes[2]),
+      new Edge(this.nodes[1], this.nodes[2]),
     ];
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
