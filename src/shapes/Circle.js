@@ -1,11 +1,15 @@
-import { ShapeTypes } from '../enums';
+import { ShapeTypes, FillTypes } from '../enums';
 
 export default class Circle {
-  constructor(anchor, radius, fillStyle) {
+  constructor(anchor, radius, color) {
     this.type = ShapeTypes.CIRCLE;
     this.radius = radius;
-    this.fillStyle = fillStyle;
+    this.color = color;
     this.anchor = anchor;
+    this.fill = {
+      type: FillTypes.COLOR,
+      color,
+    }
   }
 
   get x() {

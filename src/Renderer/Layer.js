@@ -1,12 +1,15 @@
-import { ShapeTypes } from '../enums';
+import { ShapeTypes, FillTypes } from '../enums';
 
 export default class Layer {
   _shapeDrawers = {
     [ShapeTypes.CIRCLE]: (context, shape) => {
       context.beginPath();
       context.ellipse(shape.x, shape.y, shape.radius, shape.radius, 0, 0, Math.PI * 2);
-      if (shape.fillStyle) {
-        context.fillStyle = shape.fillStyle;
+      if (shape.fill) {
+        if (shape.fill.type === FillTypes.COLOR) {
+          context.fillStyle = shape.fill.color;
+        }
+
         context.fill()
       }
     }
