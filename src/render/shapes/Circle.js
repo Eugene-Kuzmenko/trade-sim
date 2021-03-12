@@ -9,7 +9,8 @@ export default class Circle {
     this.fill = {
       type: FillTypes.COLOR,
       color,
-    }
+    };
+    this.stroke = {}
   }
 
   get x() {

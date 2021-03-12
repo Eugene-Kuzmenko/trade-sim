@@ -53,17 +53,6 @@ export default class Layer {
       }
     }
   }
-
-
-
-  drawCircle(x, y, radius, fillStyle) {
-    this.drawingContext.save();
-    this.drawingContext.fillStyle = fillStyle;
-    this.drawingContext.beginPath();
-    this.drawingContext.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2);
-    this.drawingContext.fill();
-    this.drawingContext.restore();
-  }
 }
 
 function stroke(context, stroke) {
