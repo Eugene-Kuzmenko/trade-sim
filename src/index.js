@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime.js";
 import Engine from './Engine'
 
 const WIDTH = 1024;

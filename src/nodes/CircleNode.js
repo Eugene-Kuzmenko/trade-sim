@@ -1,11 +1,10 @@
+import { Circle } from '../shapes';
+
 export default class CircleNode {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-  }
-
-  render(layer) {
-    layer.drawCircle(this.x, this.y, RADIUS, 'red');
+    this.shape = new Circle(this, RADIUS, 'red')
   }
 }
 

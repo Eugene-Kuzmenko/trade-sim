@@ -1,4 +1,17 @@
+import { ShapeTypes } from '../enums';
+
 export default class Layer {
+  _shapeDrawers = {
+    [ShapeTypes.CIRCLE]: (context, shape) => {
+      context.beginPath();
+      context.ellipse(shape.x, shape.y, shape.radius, shape.radius, 0, 0, Math.PI * 2);
+      if (shape.fillStyle) {
+        context.fillStyle = shape.fillStyle;
+        context.fill()
+      }
+    }
+  };
+
   constructor(doc, name, width, height) {
     this.name = name;
     this.canvas = doc.createElement('canvas');
@@ -19,6 +32,19 @@ export default class Layer {
     renderingTask(this);
     this.drawingContext.restore();
   }
+
+  render(shapes) {
+    for (let shape of shapes) {
+      const shapeDrawer = this._shapeDrawers[shape.type];
+      if (shapeDrawer) {
+        this.drawingContext.save();
+        shapeDrawer(this.drawingContext, shape);
+        this.drawingContext.restore();
+      }
+    }
+  }
+
+
 
   drawCircle(x, y, radius, fillStyle) {
     this.drawingContext.save();

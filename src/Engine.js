@@ -39,12 +39,16 @@ export default class Engine {
     this.camera = this._getCenterOfNodes()
   }
 
+  * _iterNodeShapes() {
+    for (let node of this.nodes) {
+      yield node.shape;
+    }
+  }
+
   render() {
     this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
       nodes: layer => {
-        for (let node of this.nodes) {
-          node.render(layer);
-        }
+        layer.render(this._iterNodeShapes());
       }
     });
   }
