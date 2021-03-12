@@ -1,4 +1,4 @@
-import { ShapeTypes, FillTypes } from '../enums';
+import { ShapeTypes, FillTypes } from './enums';
 
 export default class Layer {
   _shapeDrawers = {

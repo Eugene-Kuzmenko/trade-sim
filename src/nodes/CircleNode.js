@@ -1,4 +1,4 @@
-import { Circle } from '../shapes';
+import { Circle } from '../render/shapes';
 
 export default class CircleNode {
   constructor(x, y) {

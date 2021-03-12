@@ -1,13 +1,13 @@
 import { CircleNode } from './nodes';
-import Renderer from './Renderer';
+import Renderer from './render';
 
 export default class Engine {
   constructor (doc, width, height) {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
     this.nodes = [
-      new CircleNode(40, 40),
-      new CircleNode(120, 120),
+      new CircleNode(40, 120),
+      new CircleNode(-120, 120),
       new CircleNode(-20, -40)
     ];
     this.camera = {x: 0, y: 0};
