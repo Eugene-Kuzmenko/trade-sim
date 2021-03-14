@@ -32,6 +32,24 @@ export default class Layer {
       context.moveTo(shape.start.x, shape.start.y);
       context.lineTo(shape.end.x, shape.end.y);
       stroke(context, shape.stroke);
+    },
+    [ShapeTypes.POLYGON]: (context, shape) => {
+      context.save();
+      context.translate(shape.x, shape.y);
+      context.rotate(shape.angle);
+      context.beginPath();
+      if (shape.points == null || shape.points.length <= 0) {
+        throw Error('No vertices provided to draw polygon');
+      };
+      context.moveTo(shape.points[0].x, shape.points[0].y);
+      for(let i = 1; i < shape.points.length; i++) {
+        context.lineTo(shape.points[i].x, shape.points[i].y);
+      };
+      context.closePath();
+
+      fill(context, shape.fill);
+      stroke(context, shape.stroke);
+      context.restore()
     }
   };
 
@@ -86,6 +104,12 @@ export default class Layer {
   }
 }
 
+
+/**
+ * Function that makes context draw lines of the shape
+ * @param {Context} context 
+ * @param {object} stroke 
+ */
 function stroke(context, stroke) {
   if (!stroke) return;
   if (stroke.type === StrokeTypes.COLOR) {
@@ -94,6 +118,11 @@ function stroke(context, stroke) {
   context.stroke()
 }
 
+/**
+ * Function that makes context fill the shape
+ * @param {Context} context 
+ * @param {object} stroke 
+ */
 function fill(context, fill) {
   if (!fill) return;
   if (fill.type === FillTypes.COLOR) {
