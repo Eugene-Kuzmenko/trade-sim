@@ -1,14 +1,15 @@
 import { CircleNode } from './nodes';
 import { Edge } from './edges';
 import Renderer from './render';
+import { Traveler } from './agents';
 
 export default class Engine {
   constructor (doc, width, height) {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
     this.nodes = [
-      new CircleNode(40, 120),
-      new CircleNode(-120, 120),
+      new CircleNode(40, 120, 'blue'),
+      new CircleNode(-120, 120, 'green'),
       new CircleNode(-20, -40)
     ];
     this.edges =[
@@ -16,6 +17,10 @@ export default class Engine {
       new Edge(this.nodes[0], this.nodes[2]),
       new Edge(this.nodes[1], this.nodes[2]),
     ];
+    this.agents = [
+      new Traveler(this.nodes[0]),
+    ]
+    this.agents[0].travel(this.edges[0]);
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
   }
@@ -57,6 +62,12 @@ export default class Engine {
     }
   }
 
+  * _iterAgentShapes() {
+  for (let agent of this.agents) {
+    yield agent.shape;
+  }
+}
+
   render() {
     this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
       nodes: layer => {
@@ -64,13 +75,27 @@ export default class Engine {
       },
       edges: layer => {
         layer.render(this._iterEdgeShapes());
+      },
+      agents: layer => {
+        layer.render(this._iterAgentShapes());
+      }
+    });
+  }
+
+  renderAgents() {
+    this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
+      agents: layer => {
+        layer.render(this._iterAgentShapes());
       }
     });
   }
 
   update() {
     for (let node of this.nodes) {
-      node.update()
+      node.update();
+    }
+    for (let agent of this.agents) {
+      agent.update();
     }
   }
 }

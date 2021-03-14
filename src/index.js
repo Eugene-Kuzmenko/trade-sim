@@ -8,4 +8,6 @@ window.onload = function () {
   const engine = new Engine(document, WIDTH, HEIGHT);
   engine.attachToElement(document.getElementById('canvas-container'));
   engine.render();
+  setInterval(() => {engine.update()}, 50);
+  setInterval(() => {engine.renderAgents()}, 5);
 };
