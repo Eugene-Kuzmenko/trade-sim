@@ -19,8 +19,9 @@ export default class Engine {
     ];
     this.agents = [
       new Traveler(this.nodes[0]),
+      new Traveler(this.nodes[1]),
+      new Traveler(this.nodes[2]),
     ]
-    this.agents[0].travel(this.edges[0]);
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
   }
@@ -33,6 +34,24 @@ export default class Engine {
     const { clientHeight, clientWidth } = this.doc.body;
     this.canvas.width = clientWidth;
     this.canvas.height = clientHeight;
+  }
+
+  _travelLoop(a) {
+    if (a.destinationNode == null) {
+      switch (a.curNode) {
+        case this.nodes[0]:
+          a.travel(this.edges[0]);
+          break;
+        case this.nodes[1]:
+          a.travel(this.edges[2]);
+          break;
+        case this.nodes[2]:
+          a.travel(this.edges[1]);
+          break;
+        default:
+          break
+      }
+    }
   }
 
   _getCenterOfNodes() {
@@ -96,6 +115,7 @@ export default class Engine {
     }
     for (let agent of this.agents) {
       agent.update();
+      this._travelLoop(agent);
     }
   }
 }
