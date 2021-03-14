@@ -1,23 +1,12 @@
-import { ShapeTypes, FillTypes } from '../enums';
+import CircleBase from "./CircleBase";
 
-export default class Circle {
-  constructor(anchor, radius, color) {
-    this.type = ShapeTypes.CIRCLE;
-    this.radius = radius;
-    this.color = color;
-    this.anchor = anchor;
-    this.fill = {
-      type: FillTypes.COLOR,
-      color,
-    };
-    this.stroke = {}
-  }
-
-  get x() {
-    return this.anchor.x;
-  }
-
-  get y() {
-    return this.anchor.y;
+/**
+ * Circle shape, used if you need to update it's position manually
+ */
+export default class Circle extends CircleBase {
+  constructor(x, y, radius, color) {
+    super(radius, color)
+    this.x = x;
+    this.y = y;
   }
 }

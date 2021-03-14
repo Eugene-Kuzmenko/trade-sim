@@ -3,3 +3,8 @@ node_modules
 
 # ide
 .idea
+.vscode
+
+# artifacts
+.cache
+dist
