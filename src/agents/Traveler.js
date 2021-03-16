@@ -1,4 +1,4 @@
-import { Polygon } from "../render/shapes";
+import { ArrowSpaceShip } from "../render/shapes";
 /**
  * Node on the graph
  * @typedef {object} Node
@@ -36,14 +36,7 @@ export default class Traveler {
     this.id = id;
     this.curNode = curNode;
     this.travelTime = travelTime;
-    const points = [
-      {y: 0, x: 5},
-      {y: 5, x: 7},
-      {y: 0, x: -7},
-      {y: -5, x: 7},
-      {y: 0, x: 5},
-    ]
-    this._shape = new Polygon(curNode.x, curNode.y, points, 'red');
+    this._shape = new ArrowSpaceShip(curNode.x, curNode.y, 7, 'red');
   }
 
   /**
