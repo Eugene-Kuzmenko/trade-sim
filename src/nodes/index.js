@@ -1,1 +1,1 @@
-export { default as CircleNode } from "./CircleNode";
+export { default as Node } from "./Node";

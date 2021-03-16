@@ -28,11 +28,12 @@ export default class Traveler {
   destinationNode = null;
   
   /**
-   * 
+   * @param {unique} id - Unique identifier of the agent 
    * @param {Node} curNode - Node at which traveler starts
    * @param {number} travelTime - Time it takes traveler to get from node to node (in seconds)
    */
-  constructor(curNode, travelTime = 2) {
+  constructor(id, curNode, travelTime = 2) {
+    this.id = id;
     this.curNode = curNode;
     this.travelTime = travelTime;
     const points = [
