@@ -36,7 +36,7 @@ export default class Traveler {
     this.id = id;
     this.curNode = curNode;
     this.travelTime = travelTime;
-    this._shape = new ArrowSpaceShip(curNode.x, curNode.y, 7, 'red');
+    this._shape = new ArrowSpaceShip(curNode.x, curNode.y, 10, '#00b368', '#00ff94', 1);
   }
 
   /**

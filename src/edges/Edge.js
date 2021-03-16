@@ -15,6 +15,6 @@ export default class Edge {
     this.start = start;
     this.end = end;
     this.length = length;
-    this.shape = new EdgeLine(start, end, 'green', 3)
+    this.shape = new EdgeLine(start, end, '#354f4d', 5)
   }
 }
