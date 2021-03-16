@@ -4,6 +4,9 @@ import { Edge } from './edges';
 import Renderer from './render';
 import { Traveler } from './agents';
 
+/**
+ * Simulation engine
+ */
 export default class Engine {
   constructor (doc, width, height) {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
@@ -27,11 +30,11 @@ export default class Engine {
     this._addNode(40, 120, 'blue');
     this._addNode(-120, 120, 'green');
     this._addNode(-20, -40);
-    this._addEdge(this.nodes[0], this.nodes[1]);
+    this._addEdge(this.nodes[0], this.nodes[1], 2);
     this._addEdge(this.nodes[0], this.nodes[2]);
     this._addEdge(this.nodes[1], this.nodes[2]);
     this._addAgent(this.nodes[0]);
-    this._addAgent(this.nodes[1]);
+    this._addAgent(this.nodes[1], 0.7);
     this._addAgent(this.nodes[2]);
   }
   
@@ -40,12 +43,14 @@ export default class Engine {
    * @param {number} x 
    * @param {number} y 
    * @param {CSSColor} color 
+
    */
   _addNode(x, y, color) {
+
     this.nodes.push(
       new Node(
         this._nodeIdManager.getId(),
-        x, y, color,
+        x, y, color
       )
     );
   }
@@ -54,11 +59,13 @@ export default class Engine {
    * Connects nodes with an edge. *Do not add nodes without it*
    * @param {Node} start 
    * @param {Node} end 
+   * @param {number} length  
    */
-  _addEdge(start, end) {
+  _addEdge(start, end, length) {
+    
     this.edges.push(
       new Edge(
-        this._edgeIdManager.getId(), start, end
+        this._edgeIdManager.getId(), start, end, length
       )
     );
   }
@@ -66,10 +73,11 @@ export default class Engine {
   /**
    * Adds agent to the graph. *Do not add nodes without it*
    * @param {Node} node 
+   * @param {number} travelTime - relative time it takes to traverse a unit of edge length
    */
-  _addAgent(node){
+  _addAgent(node, travelTime){
     const id = this._agentIdManager.getId();
-    this.agents.push(new Traveler(id, node));
+    this.agents.push(new Traveler(id, node, travelTime));
   }
 
   /**
@@ -78,6 +86,30 @@ export default class Engine {
    */
   attachToElement(element) {
     this.renderer.attachToElement(element);
+  }
+
+  /**
+   * Gets coordinates in graph space that corresponse to coordinate in container element
+   * @param {number} offcenterX - x relative to renderer container's center
+   * @param {number} offcenterY - y relative to renderer container's center
+   * @returns {Point}
+   */
+  _getSpacialCoord(offcenterX, offcenterY) {
+    return {
+      x: offcenterX + this.camera.x,
+      y: offcenterY + this.camera.y,
+    }
+  }
+
+  /**
+   * Handles editor event of adding a node
+   * @param {number} offcenterX - x position relative to center of canvas container
+   * @param {number} offcenterY - y position relative to canvas of canvas container
+   */
+  handleEditorAddNode(offcenterX, offcenterY) {
+    const point = this._getSpacialCoord(offcenterX, offcenterY);
+    this._addNode(point.x, point.y);
+    this.renderNodes();
   }
 
 

@@ -35,8 +35,13 @@ export default class Traveler {
   constructor(id, curNode, travelTime = 2) {
     this.id = id;
     this.curNode = curNode;
-    this.travelTime = travelTime;
+    this._travelTime = travelTime;
+    this.curEdge = null;
     this._shape = new ArrowSpaceShip(curNode.x, curNode.y, 10, '#00b368', '#00ff94', 1);
+  }
+
+  get travelTime() {
+    return this._travelTime * this.curEdge?.length ?? 1;
   }
 
   /**
@@ -82,6 +87,7 @@ export default class Traveler {
         console.warn('cannot start travel')
     }
     this.travelStarted = new Date();
+    this.curEdge = edge;
     this._travelAngle = getVectorAngle(this.curNode, this.destinationNode);
   }
 
@@ -94,7 +100,8 @@ export default class Traveler {
     if (this.progress >= 1 && this.destinationNode !== null) {
         this.curNode = this.destinationNode;
         this.destinationNode = null;
-    }  
+        this.curEdge = null;
+    }
   }
 }
 
