@@ -1,7 +1,7 @@
 {
   "name": "trade-sim",
   "version": "1.0.0",
-  "description": "Graph based tradesim made for fun",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "test",
@@ -12,15 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Eugene-Kuzmenko/trade-sim.git"
   },
-  "keywords": [
-    "trade",
-    "sim",
-    "js",
-    "canvas",
-    "graph",
-    "space",
-    "simulation"
-  ],
+  "keywords": [],
   "author": "Eugene Kuzmenko",
   "license": "MIT",
   "bugs": {
@@ -28,6 +20,7 @@
   },
   "homepage": "https://github.com/Eugene-Kuzmenko/trade-sim#readme",
   "dependencies": {
+    "@babel/plugin-syntax-class-properties": "7.12.13",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "regenerator-runtime": "^0.13.7"
