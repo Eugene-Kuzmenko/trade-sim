@@ -2,10 +2,7 @@ import "regenerator-runtime/runtime.js";
 import Editor from "./Editor";
 import Engine from './Engine'
 
-const WIDTH = 1024;
-const HEIGHT = 768;
-
-window.onload = function () {
+function main() {
   const engine = new Engine(document, WIDTH, HEIGHT);
   const canvasContainer = document.getElementById('canvas-container');
   engine.attachToElement(canvasContainer);
@@ -31,3 +28,8 @@ window.onload = function () {
     editor.handleMouseClick(event);
   });
 };
+
+const WIDTH = 1024;
+const HEIGHT = 768;
+
+main();
