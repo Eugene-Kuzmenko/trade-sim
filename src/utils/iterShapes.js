@@ -15,7 +15,7 @@ export default iterShapes;
  * Shape for the render to render
  * @typedef {object} Shape
  * @property {string} type - shape type, which determines what shape render renders
- * @property {number} y
+ * @property {number} x
  * @property {number} y
  */
 

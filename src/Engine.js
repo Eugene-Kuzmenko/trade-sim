@@ -3,6 +3,7 @@ import { iterShapes, IdPool } from './utils';
 import { Edge } from './edges';
 import Renderer from './render';
 import { Traveler } from './agents';
+import { StrokeTypes } from './render/enums';
 
 /**
  * Simulation engine
@@ -102,9 +103,42 @@ export default class Engine {
   }
 
   /**
-   * Handles editor event of adding a node
+   * Gets node that includes coordinates
+   * @param {number} x - x of the point in graph space
+   * @param {number} y - y of the point in graph space
+   * @returns {Node | null}
+   */
+  _getNodeByCoord(x, y) {
+    for (let node of this.nodes) {
+      // do rough selection by square bounding box
+      const dx = node.shape.x - x;
+      const dy = node.shape.y - y;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) > node.shape.radius) continue;
+
+      // do precise selection using distance between the points
+      const distance = Math.sqrt(dx^2 + dy^2);
+      if (distance > node.shape.radius) continue;
+
+      return node;
+    }
+    return null;
+  }
+
+  /**
+   * Gets node by canvas container offcenter coordinates
    * @param {number} offcenterX - x position relative to center of canvas container
-   * @param {number} offcenterY - y position relative to canvas of canvas container
+   * @param {number} offcenterY - y position relative to cetner of canvas container
+   * @returns {Node | null}
+  */
+  _getNodeByOffcenterCoord(offcenterX, offcenterY) {
+    const point = this._getSpacialCoord(offcenterX, offcenterY);
+    return this._getNodeByCoord(point.x, point.y);
+  }
+
+  /**
+   * Handles editor attempting to create a node
+   * @param {number} offcenterX - x position relative to center of canvas container
+   * @param {number} offcenterY - y position relative to cetner of canvas container
    */
   handleEditorAddNode(offcenterX, offcenterY) {
     const point = this._getSpacialCoord(offcenterX, offcenterY);
@@ -112,6 +146,50 @@ export default class Engine {
     this.renderNodes();
   }
 
+  /**
+   * Handles editor selecting node
+   * @param {number} offcenterX - x position relative to center of canvas container
+   * @param {number} offcenterY - y position relative to center of canvas container
+   */
+  handleEditorSelectNode(offcenterX, offcenterY) {
+    const node = this._getNodeByOffcenterCoord(offcenterX, offcenterY);
+    return node?.id;
+  }
+
+  /**
+   * Highlights node
+   * @param {Node} node 
+   * @param {CSSColor} color 
+   */
+  _highlightNode(node, color='white') {
+    node.shape.stroke = {
+      type: StrokeTypes.COLOR,
+      color,
+    }
+    this.renderNodes();
+  }
+  
+
+  /**
+   * Handles editor attempting create an edge
+   * @param {unique} selectedNodeId - Previously selected node
+   * @param {number} offcenterX - x position relative to center of canvas container
+   * @param {number} offcenterY - y position relative to center of canvas container
+   * @returns 
+   */
+  handleEditorAddEdge(startNodeId, offcenterX, offcenterY) {
+    const endNode = this._getNodeByOffcenterCoord(offcenterX, offcenterY);
+    // Signifies to Editor that attempt failed
+    if (endNode == null) return false;
+
+    const startNode = this.nodes.find(node => node.id === startNodeId);
+    if (startNode == null) return false;
+
+    this._addEdge(startNode, endNode);
+    this.renderEdges();
+
+    return true;
+  }
 
   // TODO: remove this temporary behaviour
   _travelLoop(a) {

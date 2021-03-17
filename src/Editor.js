@@ -1,3 +1,5 @@
+import { getOffCenterMouseCoord } from "./utils";
+
 /**
  * Object that manages editing
  * @property {Modes} mode - current mode of the Editor
@@ -10,13 +12,21 @@ export default class Editor {
   constructor(handlers) {
     this.handlers = handlers;
     this.mode = Modes.IDLE;
+    this.selectedNode = null;
   }
 
   /**
-   * Handler for the click of "Add Node" button
+   * Handles click of "Add Node" button
    */
   handleAddNodeButtonClick() {
     this.mode = Modes.ADD_NODE;
+  }
+  
+  /**
+   * Handles click of "Add Edge" button
+   */
+  handleAddEdgeButtonClick() {
+    this.mode = Modes.ADD_EDGE;
   }
 
   /**
@@ -28,11 +38,23 @@ export default class Editor {
     switch (event.button) {
       case MouseButton.LEFT:
         switch (this.mode) {
-          case Modes.ADD_NODE:
-            const hw = event.target.offsetWidth * 0.5;
-            const hh = event.target.offsetHeight * 0.5;
-            this.handlers.onAddNode(event.offsetX - hw, event.offsetY - hh);
+          case Modes.ADD_NODE: {
+            const point = getOffCenterMouseCoord(event);
+            this.handlers.onAddNode(point.x, point.y);
             break;
+          }
+          case Modes.ADD_EDGE: {
+            const point = getOffCenterMouseCoord(event);
+            if (this.selectedNode == null) {
+              // Selecting first node
+              this.selectedNode = this.handlers.onSelectNode(point.x, point.y);
+            } else {
+              this.handlers.onAddEdge(this.selectedNode, point.x, point.y);
+              // Resetting selected node to be able to make new connection
+              this.selectedNode = null;
+            }
+            break;
+          }
           default:
             break;
         }
@@ -47,6 +69,7 @@ export default class Editor {
 const Modes = {
   IDLE: 'idle',
   ADD_NODE: 'add_node',
+  ADD_EDGE: 'add_edge',
 }
 
 const MouseButton = {
@@ -56,15 +79,34 @@ const MouseButton = {
 
 
 /**
- * Callback called then editor wants to add a node
- * @callback AddNodeHandler
- * @param {number} screenX - x position of a mouse relative to the element edges
- * @param {number} screenY - y position of a mouse relative to the element edges
- */
-
-
-/**
  * Map of Editor handlers
  * @typedef {object} Handlers
  * @property {AddNodeHandler} onAddNode
+ * @property {SelectNodeHandler} onSelectNode
+ * @property {AddEdgeHandler} onAddEdge
  */
+
+/**
+ * Callback called then editor wants to add a node
+ * @callback AddNodeHandler
+ * @param {number} screenX - x position of a mouse relative to the element center
+ * @param {number} screenY - y position of a mouse relative to the element center
+ */
+
+/**
+ * Callback called then editor wants to add a node
+ * @callback AddEdgeHandler
+ * @param {number} selectedNode - previously selected node
+ * @param {number} screenX - x position of a mouse relative to the element center
+ * @param {number} screenY - y position of a mouse relative to the element center
+ * @return {boolean}
+ */
+
+/**
+ * Callback called then edior attempts to select a node
+ * @callback SelectNodeHandler
+ * @param {number} screenX - x position of a mouse relative to the element center
+ * @param {number} screenY - y position of a mouse relative to the element center
+ * @return {unique | null} - Node id
+ */
+
