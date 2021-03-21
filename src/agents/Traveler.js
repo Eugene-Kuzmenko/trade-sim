@@ -1,4 +1,5 @@
 import { ArrowSpaceShip } from "../render/shapes";
+import { getVectorAngle } from '../utils';
 /**
  * Node on the graph
  * @typedef {object} Node
@@ -106,18 +107,3 @@ export default class Traveler {
 }
 
 
-/**
- * Calculates angle of the vector between origin point and destination point
- * @param {Point} a - origin point
- * @param {Point} b - destination point
- * @returns {number}
- */
-function getVectorAngle(a, b) {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const tan = dy / dx;
-  let angle = dx === 0 ?  Math.PI * 0.5 : Math.atan(tan);
-  if (dy > 0) return Math.PI + angle;
-  if (dx > 0) return Math.PI + angle;
-  return angle;
-}

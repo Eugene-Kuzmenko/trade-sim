@@ -15,12 +15,13 @@ export default class ArrowSpaceShip extends Polygon {
    */
   constructor(x, y, size, color, lineColor, lineWidth) {
     const wingspan = Math.round(size * 5/7);
+    const butt = -wingspan;
     const points = [
-      {y: 0, x: wingspan},
-      {y: wingspan, x: size},
-      {y: 0, x: -size},
-      {y: -wingspan, x: size},
-      {y: 0, x: wingspan},
+      {y: 0, x: butt},
+      {y: wingspan, x: -size},
+      {y: 0, x: size},
+      {y: -wingspan, x: -size},
+      {y: 0, x: butt},
     ];
     super(x, y, points, color, lineColor, lineWidth);
   }
