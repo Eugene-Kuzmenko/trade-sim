@@ -5,7 +5,9 @@
  */
 function * iterShapes(collection) {
   for (let item of collection) {
-    yield item.shape;
+    if (item.shape) {
+      yield item.shape;
+    }
   }
 }
 

@@ -1,9 +1,10 @@
-import { Node } from './nodes';
-import { iterShapes, IdPool } from './utils';
-import { Edge } from './edges';
+import { BasicNode, NodeType } from './nodes';
+import { EdgeType } from './edges';
+import { iterShapes, IdPool, pickAtRandom } from './utils';
 import Renderer from './render';
 import { Traveler } from './agents';
 import { StrokeTypes } from './render/enums';
+import Graph from './Graph';
 
 /**
  * Simulation engine
@@ -12,11 +13,19 @@ export default class Engine {
   constructor (doc, width, height) {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
-    this._nodeIdManager = new IdPool();
-    this._edgeIdManager = new IdPool();
+    this.graph = new Graph(
+      [
+        { type: NodeType.BASIC, id: 0, x: 40, y: 120, color: 'blue' },
+        { type: NodeType.BASIC, id: 1, x: -120, y: 120, color: 'green'},
+        { type: NodeType.BASIC, id: 2, x: -20, y: -40 },
+      ],
+      [
+        { type: EdgeType.BASIC, startId: 0, endId: 1, length: 2 },
+        { type: EdgeType.BASIC, startId: 1, endId: 2 },
+        { type: EdgeType.BASIC, startId: 2, endId: 0 },
+      ]
+    )
     this._agentIdManager = new IdPool();
-    this.nodes = [];
-    this.edges = [];
     this.agents = [];
     this._initDemoGraph();
     this.camera = {x: 0, y: 0};
@@ -28,52 +37,14 @@ export default class Engine {
    * Creates graph for demonstration and testing purposes
    */
   _initDemoGraph() {
-    this._addNode(40, 120, 'blue');
-    this._addNode(-120, 120, 'green');
-    this._addNode(-20, -40);
-    this._addEdge(this.nodes[0], this.nodes[1], 2);
-    this._addEdge(this.nodes[0], this.nodes[2]);
-    this._addEdge(this.nodes[1], this.nodes[2]);
-    this._addAgent(this.nodes[0]);
-    this._addAgent(this.nodes[1], 0.7);
-    this._addAgent(this.nodes[2]);
-  }
-  
-  /**
-   * Adds node to a graph. *Do not add nodes without it*
-   * @param {number} x 
-   * @param {number} y 
-   * @param {CSSColor} color 
-
-   */
-  _addNode(x, y, color) {
-
-    this.nodes.push(
-      new Node(
-        this._nodeIdManager.getId(),
-        x, y, color
-      )
-    );
-  }
-  
-  /**
-   * Connects nodes with an edge. *Do not add nodes without it*
-   * @param {Node} start 
-   * @param {Node} end 
-   * @param {number} length  
-   */
-  _addEdge(start, end, length) {
-    
-    this.edges.push(
-      new Edge(
-        this._edgeIdManager.getId(), start, end, length
-      )
-    );
+    this._addAgent(this.graph.getNodeById(0));
+    this._addAgent(this.graph.getNodeById(1));
+    this._addAgent(this.graph.getNodeById(2));
   }
 
   /**
    * Adds agent to the graph. *Do not add nodes without it*
-   * @param {Node} node 
+   * @param {BasicNode} node 
    * @param {number} travelTime - relative time it takes to traverse a unit of edge length
    */
   _addAgent(node, travelTime){
@@ -102,37 +73,17 @@ export default class Engine {
     }
   }
 
-  /**
-   * Gets node that includes coordinates
-   * @param {number} x - x of the point in graph space
-   * @param {number} y - y of the point in graph space
-   * @returns {Node | null}
-   */
-  _getNodeByCoord(x, y) {
-    for (let node of this.nodes) {
-      // do rough selection by square bounding box
-      const dx = node.shape.x - x;
-      const dy = node.shape.y - y;
-      if (Math.max(Math.abs(dx), Math.abs(dy)) > node.shape.radius) continue;
-
-      // do precise selection using distance between the points
-      const distance = Math.sqrt(dx^2 + dy^2);
-      if (distance > node.shape.radius) continue;
-
-      return node;
-    }
-    return null;
-  }
+  
 
   /**
    * Gets node by canvas container offcenter coordinates
    * @param {number} offcenterX - x position relative to center of canvas container
    * @param {number} offcenterY - y position relative to cetner of canvas container
-   * @returns {Node | null}
+   * @returns {BasicNode | null}
   */
   _getNodeByOffcenterCoord(offcenterX, offcenterY) {
     const point = this._getSpacialCoord(offcenterX, offcenterY);
-    return this._getNodeByCoord(point.x, point.y);
+    return this.graph.getNodeByCoord(point.x, point.y);
   }
 
   /**
@@ -142,7 +93,10 @@ export default class Engine {
    */
   handleEditorAddNode(offcenterX, offcenterY) {
     const point = this._getSpacialCoord(offcenterX, offcenterY);
-    this._addNode(point.x, point.y);
+    this.graph.addNode({
+      type: NodeType.BASIC,
+      ...point,
+    });
     this.renderNodes();
   }
 
@@ -158,7 +112,7 @@ export default class Engine {
 
   /**
    * Highlights node
-   * @param {Node} node 
+   * @param {BasicNode} node 
    * @param {CSSColor} color 
    */
   _highlightNode(node, color='white') {
@@ -182,10 +136,15 @@ export default class Engine {
     // Signifies to Editor that attempt failed
     if (endNode == null) return false;
 
-    const startNode = this.nodes.find(node => node.id === startNodeId);
+    const startNode = this.graph.nodes.find(node => node.id === startNodeId);
     if (startNode == null) return false;
 
-    this._addEdge(startNode, endNode);
+    this.graph.addEdge({
+      type: EdgeType.BASIC,
+      start: startNode,
+      end: endNode,
+    })
+
     this.renderEdges();
 
     return true;
@@ -193,20 +152,8 @@ export default class Engine {
 
   // TODO: remove this temporary behaviour
   _travelLoop(a) {
-    if (a.destinationNode == null) {
-      switch (a.curNode) {
-        case this.nodes[0]:
-          a.travel(this.edges[0]);
-          break;
-        case this.nodes[1]:
-          a.travel(this.edges[2]);
-          break;
-        case this.nodes[2]:
-          a.travel(this.edges[1]);
-          break;
-        default:
-          break
-      }
+    if (a.destinationNode == null && a.curNode.edges.length > 0) {
+      a.travel(pickAtRandom(a.curNode.edges));
     }
   }
 
@@ -215,10 +162,11 @@ export default class Engine {
    * @returns {Point}
    */
   _getCenterOfNodes() {
-    const minX = this.nodes.reduce((a, b) => b.x < a.x ? b : a).x;
-    const minY = this.nodes.reduce((a, b) => b.y < a.y ? b : a).y;
-    const maxX = this.nodes.reduce((a, b) => b.x > a.x ? b : a).x;
-    const maxY = this.nodes.reduce((a, b) => b.y > a.y ? b : a).y;
+    const nodes = this.graph.nodes;
+    const minX = nodes.reduce((a, b) => b.x < a.x ? b : a).x;
+    const minY = nodes.reduce((a, b) => b.y < a.y ? b : a).y;
+    const maxX = nodes.reduce((a, b) => b.x > a.x ? b : a).x;
+    const maxY = nodes.reduce((a, b) => b.y > a.y ? b : a).y;
     return {
       x: minX + (maxX - minX) / 2,
       y: minY + (maxY - minY) / 2
@@ -247,7 +195,7 @@ export default class Engine {
   renderNodes() {
     this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
       nodes: layer => {
-        layer.render(iterShapes(this.nodes));
+        layer.render(iterShapes(this.graph.nodes));
       },
     });
   }
@@ -258,7 +206,7 @@ export default class Engine {
   renderEdges() {
     this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
       edges: layer => {
-        layer.render(iterShapes(this.edges));
+        layer.render(iterShapes(this.graph.edges));
       },
     });
   }
@@ -277,7 +225,7 @@ export default class Engine {
    * Method that updates state of the objects in the simulation
    */
   update() {
-    for (let node of this.nodes) {
+    for (let node of this.graph.nodes) {
       node.update();
     }
     for (let agent of this.agents) {

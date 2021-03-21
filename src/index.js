@@ -1,6 +1,6 @@
 import "regenerator-runtime/runtime.js";
-import Editor from "./Editor";
-import Engine from './Engine'
+import Editor from './Editor';
+import Engine from './Engine';
 
 function main() {
   const engine = new Engine(document, WIDTH, HEIGHT);
