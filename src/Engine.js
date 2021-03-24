@@ -113,6 +113,15 @@ export default class Engine {
     this.renderNodes();
   }
   
+  /**
+   * Handles editor importing a graph
+   * @param {PlainGraph} graph 
+   */
+  handleEditorLoadGraph(graph) {
+    this.graph = Graph.create(graph);
+    this._initDemoGraph();
+    this.renderAll();
+  }
 
   /**
    * Handles editor attempting create an edge

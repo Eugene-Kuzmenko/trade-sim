@@ -28,6 +28,14 @@ export default class Editor {
   handleAddEdgeButtonClick() {
     this.mode = Modes.ADD_EDGE;
   }
+  
+  async handleLoadGraphFileChange(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/json') {
+      const graph = JSON.parse(await file.text());
+      this.handlers.onLoadGraph(graph);
+    }
+  }
 
   /**
    * Handles click of the mouse click
@@ -84,6 +92,7 @@ const MouseButton = {
  * @property {AddNodeHandler} onAddNode
  * @property {SelectNodeHandler} onSelectNode
  * @property {AddEdgeHandler} onAddEdge
+ * @property {LoadGraphHandler} onLoadGraph
  */
 
 /**
@@ -110,3 +119,9 @@ const MouseButton = {
  * @return {unique | null} - Node id
  */
 
+
+/**
+ * Callback called then edior attempts to load graph
+ * @callback LoadGraphHandler
+ * @param {PlainGraph} graph - plain representation of the graph (no logic)
+ */

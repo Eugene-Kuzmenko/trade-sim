@@ -15,6 +15,7 @@ function main() {
     onAddNode: (x, y) => engine.handleEditorAddNode(x, y),
     onSelectNode: (x, y) => engine.handleEditorSelectNode(x, y),
     onAddEdge: (nodeId, x, y) => engine.handleEditorAddEdge(nodeId, x, y),
+    onLoadGraph: (graph) => engine.handleEditorLoadGraph(graph),
   })
 
   document.getElementById('add-node').addEventListener('click', (event) => {
@@ -24,6 +25,10 @@ function main() {
   document.getElementById('add-edge').addEventListener('click', (event) => {
     editor.handleAddEdgeButtonClick(event);
   });
+
+  document.getElementById('load-graph').addEventListener('change', (event) => {
+    editor.handleLoadGraphFileChange(event);
+  })
 
   canvasContainer.addEventListener('mouseup', (event) => {
     editor.handleMouseClick(event);

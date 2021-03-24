@@ -3,10 +3,12 @@
     { "type": "basic", "id": 0, "x": 40, "y": 120, "color": "blue" },
     { "type": "basic", "id": 1, "x": -120, "y": 120, "color": "green"},
     { "type": "basic", "id": 2, "x": -20, "y": -40 },
+    { "type": "basic", "id": 3, "x": 100, "y": 0 }
   ],
   "edges": [
     { "id": 1, "type": "basic", "startId": 0, "endId": 1, "length": 2 },
     { "id": 2, "type": "basic", "startId": 1, "endId": 2 },
     { "id": 3, "type": "basic", "startId": 2, "endId": 0 },
+    { "id": 4, "type": "basic", "startId": 2, "endId": 3 }
   ]
 }
