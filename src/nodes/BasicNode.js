@@ -21,6 +21,10 @@ export default class BasicNode {
     this.edges = [];
   }
 
+  get type() {
+    return this.constructor.type;
+  }
+
   /**
    * Creates node based on dump object
    * @param {BasicNodeDump} dump - simple object, that contains just enough data to create a node
@@ -41,6 +45,7 @@ export default class BasicNode {
    */
   getDump() {
     return {
+      id: this.id,
       type: this.type,
       x: this.x,
       y: this.y,

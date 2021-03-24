@@ -119,8 +119,17 @@ export default class Engine {
    */
   handleEditorLoadGraph(graph) {
     this.graph = Graph.create(graph);
+    this.agents = [];
     this._initDemoGraph();
     this.renderAll();
+  }
+
+  /**
+   * Handles editor importing a graph
+   * @param {PlainGraph} graph 
+   */
+  handleEditorSaveGraph() {
+    return this.graph.getDump();
   }
 
   /**

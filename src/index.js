@@ -11,11 +11,14 @@ function main() {
   setInterval(() => {engine.update()}, 50);
   setInterval(() => {engine.renderAgents()}, 5);
 
+  const inputSaveFile = document.getElementById('save-file-name');
+
   const editor = new Editor({
     onAddNode: (x, y) => engine.handleEditorAddNode(x, y),
     onSelectNode: (x, y) => engine.handleEditorSelectNode(x, y),
     onAddEdge: (nodeId, x, y) => engine.handleEditorAddEdge(nodeId, x, y),
     onLoadGraph: (graph) => engine.handleEditorLoadGraph(graph),
+    onSaveGraph: () => engine.handleEditorSaveGraph(),
   })
 
   document.getElementById('add-node').addEventListener('click', (event) => {
@@ -27,7 +30,13 @@ function main() {
   });
 
   document.getElementById('load-graph').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) inputSaveFile.value = file.name;
     editor.handleLoadGraphFileChange(event);
+  })
+
+  document.getElementById('save-graph').addEventListener('click', () => {
+    editor.handleSaveGraphButtonClick(document, inputSaveFile.value);
   })
 
   canvasContainer.addEventListener('mouseup', (event) => {

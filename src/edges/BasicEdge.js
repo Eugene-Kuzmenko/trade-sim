@@ -8,6 +8,10 @@ import EdgeType from "./EdgeType";
 export default class BasicEdge {
   static type = EdgeType.BASIC
 
+  get type() {
+    return this.constructor.type;
+  }
+
   /**
    * @param {unique} id - unique identifier of edge
    * @param {Node} start - first node
@@ -40,8 +44,9 @@ export default class BasicEdge {
     );
   }
 
-  dump() {
+  getDump() {
     return {
+      type: this.type,
       id: this.id,
       startId: this.start.id,
       endId: this.end.id,

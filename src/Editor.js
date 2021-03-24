@@ -1,4 +1,4 @@
-import { getOffCenterMouseCoord } from "./utils";
+import { getOffCenterMouseCoord, saveJsonFile } from "./utils";
 
 /**
  * Object that manages editing
@@ -35,6 +35,10 @@ export default class Editor {
       const graph = JSON.parse(await file.text());
       this.handlers.onLoadGraph(graph);
     }
+  }
+
+  handleSaveGraphButtonClick(document, fileName) {
+    saveJsonFile(document, this.handlers.onSaveGraph(), fileName)
   }
 
   /**
@@ -93,6 +97,7 @@ const MouseButton = {
  * @property {SelectNodeHandler} onSelectNode
  * @property {AddEdgeHandler} onAddEdge
  * @property {LoadGraphHandler} onLoadGraph
+ * @property {SaveGraphHandler} onSaveGraph
  */
 
 /**
@@ -124,4 +129,11 @@ const MouseButton = {
  * Callback called then edior attempts to load graph
  * @callback LoadGraphHandler
  * @param {PlainGraph} graph - plain representation of the graph (no logic)
+ */
+
+
+/**
+ * Callback called then edior attempts to save graph into a file
+ * @callback SaveGraphHandler
+ * @returns {PlainGraph} graph - plain representation of the graph (no logic)
  */

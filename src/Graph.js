@@ -125,8 +125,9 @@ export default class Graph {
    */
   getDump() {
     const dump = { nodes: [], edges: [] };
-    for (node of this.nodes) dump.nodes.push(node.getDump());
-    for (edge of this.edges) dump.edges.push(node.getDump());
+    for (let node of this.nodes) dump.nodes.push(node.getDump());
+    for (let edge of this.edges) dump.edges.push(edge.getDump());
+    return dump;
   }
 }
 
