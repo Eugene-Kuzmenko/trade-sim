@@ -1,9 +1,10 @@
 import "regenerator-runtime/runtime.js";
 import Editor from './Editor';
 import Engine from './Engine';
+import defaultGraph from './default_graph.json';
 
 function main() {
-  const engine = new Engine(document, WIDTH, HEIGHT);
+  const engine = new Engine(document, defaultGraph, WIDTH, HEIGHT);
   const canvasContainer = document.getElementById('canvas-container');
   engine.attachToElement(canvasContainer);
   engine.renderAll();

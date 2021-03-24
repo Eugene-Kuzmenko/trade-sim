@@ -10,21 +10,10 @@ import Graph from './Graph';
  * Simulation engine
  */
 export default class Engine {
-  constructor (doc, width, height) {
+  constructor (doc, graph, width, height) {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
-    this.graph = new Graph(
-      [
-        { type: NodeType.BASIC, id: 0, x: 40, y: 120, color: 'blue' },
-        { type: NodeType.BASIC, id: 1, x: -120, y: 120, color: 'green'},
-        { type: NodeType.BASIC, id: 2, x: -20, y: -40 },
-      ],
-      [
-        { type: EdgeType.BASIC, startId: 0, endId: 1, length: 2 },
-        { type: EdgeType.BASIC, startId: 1, endId: 2 },
-        { type: EdgeType.BASIC, startId: 2, endId: 0 },
-      ]
-    )
+    this.graph = Graph.create(graph);
     this._agentIdManager = new IdPool();
     this.agents = [];
     this._initDemoGraph();
@@ -37,9 +26,10 @@ export default class Engine {
    * Creates graph for demonstration and testing purposes
    */
   _initDemoGraph() {
-    this._addAgent(this.graph.getNodeById(0));
-    this._addAgent(this.graph.getNodeById(1));
-    this._addAgent(this.graph.getNodeById(2));
+    const nodes = this.graph.nodes;
+    this._addAgent(pickAtRandom(nodes));
+    this._addAgent(pickAtRandom(nodes));
+    this._addAgent(pickAtRandom(nodes));
   }
 
   /**

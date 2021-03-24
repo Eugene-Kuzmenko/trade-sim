@@ -26,6 +26,15 @@ export default class Graph {
     this._resolver = { getNodeById: this.getNodeById }
   }
 
+  /**
+   * Creates graph object from the plain graph representation
+   * @param {GraphDump} plainGraph 
+   * @returns {Graph}
+   */
+  static create(plainGraph) {
+    return new Graph(plainGraph.nodes, plainGraph.edges);
+  }
+
   get nodes() {
     return this._nodes;
   }
@@ -109,6 +118,16 @@ export default class Graph {
    * @returns {Node}
    */
   getEdgeById = id => this._edges.find(edge => edge.id === id);
+
+  /**
+   * Returns plain object representation of the graph
+   * @returns {GraphDump}
+   */
+  getDump() {
+    const dump = { nodes: [], edges: [] };
+    for (node of this.nodes) dump.nodes.push(node.getDump());
+    for (edge of this.edges) dump.edges.push(node.getDump());
+  }
 }
 
 /**
@@ -124,4 +143,12 @@ export default class Graph {
  * @callback GetNodeById
  * @param {unique} nodeId - Id of a node you want to find
  * @returns {Node}
+ */
+
+/**
+ * Plain object, representing the graph
+ * @typedef ({
+ *   nodes: Node[],
+ *   edges: Edge[],
+ * }) GraphDump
  */
