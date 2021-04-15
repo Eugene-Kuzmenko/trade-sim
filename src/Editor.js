@@ -15,18 +15,16 @@ export default class Editor {
     this.selectedNode = null;
   }
 
-  /**
-   * Handles click of "Add Node" button
-   */
   handleAddNodeButtonClick() {
     this.mode = Modes.ADD_NODE;
   }
   
-  /**
-   * Handles click of "Add Edge" button
-   */
   handleAddEdgeButtonClick() {
     this.mode = Modes.ADD_EDGE;
+  }
+
+  handleAddAgentButtonClick() {
+    this.mode = Modes.ADD_AGENT;
   }
   
   async handleLoadGraphFileChange(event) {
@@ -67,6 +65,11 @@ export default class Editor {
             }
             break;
           }
+          case Modes.ADD_AGENT: {
+            const point = getOffCenterMouseCoord(event);
+            const node = this.handlers.onSelectNode(point.x, point.y);
+            this.handlers.onAddAgent(node);
+          }
           default:
             break;
         }
@@ -82,6 +85,7 @@ const Modes = {
   IDLE: 'idle',
   ADD_NODE: 'add_node',
   ADD_EDGE: 'add_edge',
+  ADD_AGENT: 'add_agent',
 }
 
 const MouseButton = {
@@ -96,6 +100,7 @@ const MouseButton = {
  * @property {AddNodeHandler} onAddNode
  * @property {SelectNodeHandler} onSelectNode
  * @property {AddEdgeHandler} onAddEdge
+ * @property {AddAgentHandler} onAddAgent
  * @property {LoadGraphHandler} onLoadGraph
  * @property {SaveGraphHandler} onSaveGraph
  */
@@ -106,6 +111,11 @@ const MouseButton = {
  * @param {number} screenX - x position of a mouse relative to the element center
  * @param {number} screenY - y position of a mouse relative to the element center
  */
+
+ /**
+ * Callback called then editor wants to add a node
+ * @callback AddAgentHandler
+ * @param {Node} node - Node to which agent would be added
 
 /**
  * Callback called then editor wants to add a node

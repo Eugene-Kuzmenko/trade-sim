@@ -2,6 +2,7 @@ import "regenerator-runtime/runtime.js";
 import Editor from './Editor';
 import Engine from './Engine';
 import defaultGraph from './default_graph.json';
+import { Toolbar, FileLoad, Button, SubmitInput } from './ui';
 
 function main() {
   const engine = new Engine(document, defaultGraph, WIDTH, HEIGHT);
@@ -21,23 +22,25 @@ function main() {
     onSaveGraph: () => engine.handleEditorSaveGraph(),
   })
 
-  document.getElementById('add-node').addEventListener('click', (event) => {
-    editor.handleAddNodeButtonClick(event);
-  });
+  const toolbar = new Toolbar([
+    new Button('Add Node', (event) => {
+      editor.handleAddNodeButtonClick(event);
+    }),
+    new Button('Add Edge', (event) => {
+      editor.handleAddEdgeButtonClick(event);
+    }),
+    new Button('Add Agent', (event) => {
+      editor.handleAddAgentButtonClick(event);
+    }),
+    new FileLoad((event) => {
+      editor.handleLoadGraphFileChange(event);
+    }),
+    new SubmitInput('Save Graph', (value) => {
+      editor.handleSaveGraphButtonClick(document, value);
+    })
+  ]);
 
-  document.getElementById('add-edge').addEventListener('click', (event) => {
-    editor.handleAddEdgeButtonClick(event);
-  });
-
-  document.getElementById('load-graph').addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) inputSaveFile.value = file.name;
-    editor.handleLoadGraphFileChange(event);
-  })
-
-  document.getElementById('save-graph').addEventListener('click', () => {
-    editor.handleSaveGraphButtonClick(document, inputSaveFile.value);
-  })
+  document.getElementById('toolbar').append(toolbar.element);
 
   canvasContainer.addEventListener('mouseup', (event) => {
     editor.handleMouseClick(event);
