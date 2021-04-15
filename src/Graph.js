@@ -1,29 +1,41 @@
 import { EdgeTypeMap } from './edges';
 import { NodeTypeMap } from './nodes';
+import { AgentTypeMap } from './agents';
 import { IdPool } from './utils';
+
 
 /**
  * Object responsible for managing graph
  */
 export default class Graph {
-  constructor(nodes, edges) {
-    this._nodeIdManager = new IdPool();
-    this._edgeIdManager = new IdPool();
+  constructor(nodes, edges, agents) {
+    this._idManagers = {
+      node: new IdPool(),
+      edge: new IdPool(),
+      agent: new IdPool(),
+    }
     this._nodes = []
     this._edges = []
+    this._agents = []
 
     const nodeMap = {};
     for (let node of nodes) {
       nodeMap[node.id] = this.addNode(node);
     }
 
+    const hashedNodeResolver = {
+      getNodeById: id => nodeMap[id],
+    };
+
     for (let edge of edges) {
-      this.addEdge(edge, {
-        getNodeById: id => nodeMap[id],
-      });
+      this.addEdge(edge, hashedNodeResolver);
     }
 
-    this._resolver = { getNodeById: this.getNodeById }
+    for (let agent of agents) {
+      this.addAgent(agent, hashedNodeResolver);
+    }
+
+    this._resolver = { getNodeById: this.getNodeById };
   }
 
   /**
@@ -32,9 +44,10 @@ export default class Graph {
    * @returns {Graph}
    */
   static create(plainGraph) {
-    return new Graph(plainGraph.nodes, plainGraph.edges);
+    return new Graph(plainGraph.nodes, plainGraph.edges, plainGraph.agents);
   }
 
+  
   get nodes() {
     return this._nodes;
   }
@@ -43,17 +56,38 @@ export default class Graph {
     return this._edges;
   }
 
+  get agents() {
+    return this._agents;
+  }
+
+  static _typeMaps = {
+    'node': NodeTypeMap,
+    'edge': EdgeTypeMap,
+    'agent': AgentTypeMap,
+  }
+
+  /**
+   * Creates instance of object type
+   * @param {string} type - Overall type of object
+   * @param {object} dump - plain object used to create class instance
+   * @param {Resolver} resolver - object that allows to get related objects by key
+   */
+  _create(type, dump, resolver = null) {
+    if (resolver === null) resolver = this._resolver;
+    const Class = this.constructor._typeMaps[type][dump.type];
+    if (!Class) throw new Error(`${superType} type "${dump.type}" is not recognized`);
+    return Class.create(
+      { ...dump, id: this._idManagers[type].getId(dump.id) },
+      resolver
+    );
+  }
+
   /**
    * Adds node to a graph
    * @param {object} plainNode - Plain representation of a node
    */
   addNode(plainNode) {
-    const Node = NodeTypeMap[plainNode.type];
-    if (!Node) throw new Error(`Node type "${plainNode.type}" is not recognized`);
-    const node = Node.create({
-      ...plainNode,
-      id: this._nodeIdManager.getId(plainNode.id), // creates new id if current doesnt exist
-    });
+    const node = this._create('node', plainNode)
     this.nodes.push(node);
     return node;
   }
@@ -64,17 +98,7 @@ export default class Graph {
    * @param {Resolver} resolver - Object, that provides Edge with relevant data
    */
   addEdge(plainEdge, resolver=null) {
-    const Edge = EdgeTypeMap[plainEdge.type];
-    if (!Edge) throw new Error(`Edge type "${plainEdge.type}" is not recognized`);
-    if (resolver === null) resolver = this._resolver;
-  
-    const edge = Edge.create(
-      {
-        ...plainEdge,
-        id: this._edgeIdManager.getId(plainEdge.id), // creates new id if current doesnt exist
-      }, 
-      resolver
-    );
+    const edge = this._create('edge', plainEdge, resolver);
     this.edges.push(edge)
 
     edge.start.addEdge(edge);
@@ -83,12 +107,23 @@ export default class Graph {
   }
 
   /**
+   * Adds agent to a graph
+   * @param {object} plainAgent - Plain object representation of an agent
+   * @param {Resolver} resolver - Object, that provides Agent with relevant data
+   */
+  addAgent(plainAgent, resolver=null) {
+    const agent = this._create('agent', plainAgent, resolver);
+    this.agents.push(agent);
+    return agent;
+  }
+
+  /**
    * Gets node that includes coordinates
    * @param {number} x - x of the point in graph space
    * @param {number} y - y of the point in graph space
    * @returns {BasicNode | null}
    */
-   getNodeByCoord(x, y) {
+  getNodeByCoord(x, y) {
     for (let node of this.nodes) {
       // do rough selection by square bounding box
       const dx = node.shape.x - x;
@@ -118,15 +153,23 @@ export default class Graph {
    * @returns {Node}
    */
   getEdgeById = id => this._edges.find(edge => edge.id === id);
+  /**
+   * Returns Agent that matches specified id
+   * @method
+   * @param {number} id - id of the node
+   * @returns {Agent}
+   */
+  getAgentById = id => this._agents.find(agent => agent.id === id);
 
   /**
    * Returns plain object representation of the graph
    * @returns {GraphDump}
    */
   getDump() {
-    const dump = { nodes: [], edges: [] };
+    const dump = { nodes: [], edges: [], agents: [] };
     for (let node of this.nodes) dump.nodes.push(node.getDump());
     for (let edge of this.edges) dump.edges.push(edge.getDump());
+    for (let agent of this.agents) dump.agents.push(agent.getDump());
     return dump;
   }
 }

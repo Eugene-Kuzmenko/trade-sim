@@ -2,11 +2,16 @@
   "nodes": [
     { "type": "basic", "id": 0, "x": 40, "y": 120, "color": "blue" },
     { "type": "basic", "id": 1, "x": -120, "y": 120, "color": "green"},
-    { "type": "basic", "id": 2, "x": -20, "y": -40 },
+    { "type": "basic", "id": 2, "x": -20, "y": -40 }
   ],
   "edges": [
     { "id": 1, "type": "basic", "startId": 0, "endId": 1, "length": 2 },
     { "id": 2, "type": "basic", "startId": 1, "endId": 2 },
-    { "id": 3, "type": "basic", "startId": 2, "endId": 0 },
+    { "id": 0, "type": "basic", "startId": 2, "endId": 0 },
+  ],
+  "agents": [
+    { "id": 1, "type": "traveler", "nodeId": 0, "travelTime": 1 },
+    { "id": 2, "type": "traveler", "nodeId": 1, "travelTime": 1 },
+    { "id": 0, "type": "traveler", "nodeId": 2 }
   ]
 }

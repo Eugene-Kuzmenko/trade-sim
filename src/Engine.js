@@ -2,7 +2,6 @@ import { BasicNode, NodeType } from './nodes';
 import { EdgeType } from './edges';
 import { iterShapes, IdPool, pickAtRandom } from './utils';
 import Renderer from './render';
-import { Traveler } from './agents';
 import { StrokeTypes } from './render/enums';
 import Graph from './Graph';
 
@@ -14,32 +13,8 @@ export default class Engine {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
     this.graph = Graph.create(graph);
-    this._agentIdManager = new IdPool();
-    this.agents = [];
-    this._initDemoGraph();
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
-  }
-
-  /**
-   * ToDo: Replace with json fixture
-   * Creates graph for demonstration and testing purposes
-   */
-  _initDemoGraph() {
-    const nodes = this.graph.nodes;
-    this._addAgent(pickAtRandom(nodes));
-    this._addAgent(pickAtRandom(nodes));
-    this._addAgent(pickAtRandom(nodes));
-  }
-
-  /**
-   * Adds agent to the graph. *Do not add nodes without it*
-   * @param {BasicNode} node 
-   * @param {number} travelTime - relative time it takes to traverse a unit of edge length
-   */
-  _addAgent(node, travelTime){
-    const id = this._agentIdManager.getId();
-    this.agents.push(new Traveler(id, node, travelTime));
   }
 
   /**
@@ -119,8 +94,6 @@ export default class Engine {
    */
   handleEditorLoadGraph(graph) {
     this.graph = Graph.create(graph);
-    this.agents = [];
-    this._initDemoGraph();
     this.renderAll();
   }
 
@@ -224,7 +197,7 @@ export default class Engine {
   renderAgents() {
     this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
       agents: layer => {
-        layer.render(iterShapes(this.agents));
+        layer.render(iterShapes(this.graph.agents));
       }
     });
   }
@@ -236,7 +209,7 @@ export default class Engine {
     for (let node of this.graph.nodes) {
       node.update();
     }
-    for (let agent of this.agents) {
+    for (let agent of this.graph.agents) {
       agent.update();
       this._travelLoop(agent);
     }

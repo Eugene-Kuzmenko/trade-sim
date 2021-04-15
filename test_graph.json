@@ -9,6 +9,11 @@
     { "id": 1, "type": "basic", "startId": 0, "endId": 1, "length": 2 },
     { "id": 2, "type": "basic", "startId": 1, "endId": 2 },
     { "id": 3, "type": "basic", "startId": 2, "endId": 0 },
-    { "id": 4, "type": "basic", "startId": 2, "endId": 3 }
+    { "id": 0, "type": "basic", "startId": 2, "endId": 3 }
+  ],
+  "agents": [
+    { "id": 1, "type": "traveler", "nodeId": 0, "travelTime": 1 },
+    { "id": 2, "type": "traveler", "nodeId": 1, "travelTime": 1 },
+    { "id": 3, "type": "traveler", "nodeId": 2 }
   ]
 }

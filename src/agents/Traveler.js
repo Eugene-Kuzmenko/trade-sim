@@ -1,5 +1,7 @@
 import { ArrowSpaceShip } from "../render/shapes";
 import { getVectorAngle } from '../utils';
+import AgentType from './AgentType';
+
 /**
  * Node on the graph
  * @typedef {object} Node
@@ -24,6 +26,7 @@ import { getVectorAngle } from '../utils';
  * @property progress {number} - how much of the edge have been traversed
  */
 export default class Traveler {
+  static type = AgentType.TRAVELER;
   curEdge = null;
   travelStarted = null;
   destinationNode = null;
@@ -37,8 +40,11 @@ export default class Traveler {
     this.id = id;
     this.curNode = curNode;
     this._travelTime = travelTime;
-    this.curEdge = null;
     this._shape = new ArrowSpaceShip(curNode.x, curNode.y, 10, '#00b368', '#00ff94', 1);
+  }
+
+  get type() {
+    return this.constructor.type;
   }
 
   get travelTime() {
@@ -78,7 +84,7 @@ export default class Traveler {
   }
 
   /**
-   * Initiate travel between nodes
+   * Starts travel between nodes
    * @param {Edge} edge - Valid edge, by which travel will proceed. Should be attached to current node of the traveler
    */
   travel(edge) {
@@ -104,6 +110,53 @@ export default class Traveler {
         this.curEdge = null;
     }
   }
+
+
+  /**
+   * Creates agent based on plain initializer object
+   * @param {TravelerDump} agentData - contains data required for agent creation 
+   * @param {NodeResolver} resolver - object, that allows retrieve nodes by Id
+   * @returns {Traveler}
+   */
+  static create(agentData, resolver) {
+    const { id, nodeId, travelTime } = agentData;
+    return new Traveler(id, resolver.getNodeById(nodeId), travelTime);
+  }
+
+  /**
+   * Creates plain initialiser object, that can be used to initialise that kind of agent
+   * @returns {TravelerDump}
+   */
+  getDump() {
+    return {
+      type: this.type,
+      id: this.id,
+      nodeId: this.curNode.id,
+      travelTime: this.travel.type,
+    };
+  }
 }
 
+/**
+ * Initialiser object for traveler
+ * @typedef {
+ *   type: string,
+ *   id: unique,
+ *   curNodeId: unique,
+ *   travelTime: number
+ * } TravelerDump
+ */
 
+/**
+ * Object, that allows to get node by Id
+ * @typedef {object} NodeResolver
+ * @property {GetNodeById} getNodeById - returns node
+ */
+
+
+ /**
+ * Gets node by id
+ * @callback GetNodeById
+ * @param {unique} nodeId - Id of a node you want to find
+ * @returns {Node}
+ */
