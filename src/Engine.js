@@ -4,6 +4,8 @@ import { iterShapes, IdPool, pickAtRandom } from './utils';
 import Renderer from './render';
 import { StrokeTypes } from './render/enums';
 import Graph from './Graph';
+import { Agent } from 'https';
+import { AgentType } from './agents';
 
 /**
  * Simulation engine
@@ -63,6 +65,18 @@ export default class Engine {
       ...point,
     });
     this.renderNodes();
+  }
+
+    /**
+   * Handles editor attempting to create a agent
+   * @param {unique} nodeId - Node id where agent supposed to be added
+   */
+  handleEditorAddAgent(nodeId) {
+    this.graph.addAgent({
+      type: AgentType.TRAVELER,
+      nodeId,
+    });
+    this.renderAgents;  
   }
 
   /**

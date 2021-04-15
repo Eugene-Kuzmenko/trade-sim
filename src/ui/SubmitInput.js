@@ -10,7 +10,7 @@ export default class SubmitInput {
     this.input = document.createElement('input');
     this.element.appendChild(this.input);
     this.submitBtn = new Button(name, () => {
-      handler(input.value);
+      handler(this.input.value);
     });
     this.element.appendChild(this.submitBtn.element);
   } 

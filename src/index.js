@@ -18,6 +18,7 @@ function main() {
     onAddNode: (x, y) => engine.handleEditorAddNode(x, y),
     onSelectNode: (x, y) => engine.handleEditorSelectNode(x, y),
     onAddEdge: (nodeId, x, y) => engine.handleEditorAddEdge(nodeId, x, y),
+    onAddAgent: (nodeId) => engine.handleEditorAddAgent(nodeId),
     onLoadGraph: (graph) => engine.handleEditorLoadGraph(graph),
     onSaveGraph: () => engine.handleEditorSaveGraph(),
   })

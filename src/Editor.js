@@ -67,8 +67,9 @@ export default class Editor {
           }
           case Modes.ADD_AGENT: {
             const point = getOffCenterMouseCoord(event);
-            const node = this.handlers.onSelectNode(point.x, point.y);
-            this.handlers.onAddAgent(node);
+            const nodeId = this.handlers.onSelectNode(point.x, point.y);
+            if (!nodeId) break;
+            this.handlers.onAddAgent(nodeId);
           }
           default:
             break;
