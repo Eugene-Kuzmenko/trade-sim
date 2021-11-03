@@ -18,12 +18,12 @@ import AgentType from './AgentType';
 
 /**
  * Spaceship traveling between nodes
- * @property x {number}
- * @property y {number}
- * @property destinationNode {Node | null} - node to which traveler is traveling. Null if traveler is idle
- * @property travelStarted {Date | null} - time at which travel had started
- * @property travelTime {number} - time it takes to traverse the edge
- * @property progress {number} - how much of the edge have been traversed
+ * @property {number} x
+ * @property {number} y
+ * @property {Node | null} destinationNode - node to which traveler is traveling. Null if traveler is idle
+ * @property {Date | null} travelStarted - time at which travel had started
+ * @property {number} travelTime - time it takes to traverse the edge
+ * @property {number} progress - how much of the edge have been traversed
  */
 export default class Traveler {
   static type = AgentType.TRAVELER;
@@ -88,15 +88,18 @@ export default class Traveler {
    * @param {Edge} edge - Valid edge, by which travel will proceed. Should be attached to current node of the traveler
    */
   travel(edge) {
+    let canTravel = this.destinationNode !== null;
     if (edge.start === this.curNode) this.destinationNode = edge.end;
-    if (edge.end === this.curNode) this.destinationNode = edge.start;
-    if (this.destinationNode === null) {
-        console.warn('cannot start travel')
+    else if (edge.end === this.curNode) this.destinationNode = edge.start;
+    else canTravel = false;
+    if (!canTravel) {
+        console.warn('cannot start travel');
     }
     this.travelStarted = new Date();
     this.curEdge = edge;
     this._travelAngle = getVectorAngle(this.curNode, this.destinationNode);
   }
+
 
   /**
    * Update object's state
