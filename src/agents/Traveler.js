@@ -123,7 +123,7 @@ export default class Traveler {
    */
   static create(agentData, resolver) {
     const { id, nodeId, travelTime } = agentData;
-    return new Traveler(id, resolver.getNodeById(nodeId), travelTime);
+    return new this(id, resolver.getNodeById(nodeId), travelTime);
   }
 
   /**

@@ -3,6 +3,7 @@
  */
 const AgentType = {
   TRAVELER: 'traveler',
+  PATH_TRAVELER: 'path_traveler',
 };
 
 export default AgentType;

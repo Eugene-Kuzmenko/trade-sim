@@ -1,4 +1,5 @@
 import Traveler from "./Traveler";
+import AgentType from "./AgentType";
 
 /**
  * Node on the graph
@@ -24,7 +25,9 @@ import Traveler from "./Traveler";
  * @property {Edge[]} path - current path agent is traveling
  * @property {Number} pathIndex - index of current path step
  */
-class PathTraveler extends Traveler {
+export default class PathTraveler extends Traveler {
+  static type = AgentType.PATH_TRAVELER
+
   /**
    * Sets current path to list of edges to travel
    * @param {Edge[]} edgePath - sequence of edges to travel

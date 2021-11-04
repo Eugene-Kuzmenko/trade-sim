@@ -15,6 +15,9 @@ export default class Engine {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
     this.graph = Graph.create(graph);
+    const agent = this.graph.getAgentById(1);
+    const path = [3, 8, 10, 17, 18, 20].map(id => this.graph.getEdgeById(id));
+    agent.travelEdgePath(path);
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
   }
@@ -225,7 +228,6 @@ export default class Engine {
     }
     for (let agent of this.graph.agents) {
       agent.update();
-      this._travelLoop(agent);
     }
   }
 }

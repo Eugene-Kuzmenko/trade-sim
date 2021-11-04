@@ -1,17 +1,296 @@
 {
   "nodes": [
-    { "type": "basic", "id": 0, "x": 40, "y": 120, "color": "blue" },
-    { "type": "basic", "id": 1, "x": -120, "y": 120, "color": "green"},
-    { "type": "basic", "id": 2, "x": -20, "y": -40 }
+    {
+      "id": 0,
+      "type": "basic",
+      "x": 40,
+      "y": 120,
+      "color": "blue"
+    },
+    {
+      "id": 1,
+      "type": "basic",
+      "x": -120,
+      "y": 120,
+      "color": "green"
+    },
+    {
+      "id": 2,
+      "type": "basic",
+      "x": -20,
+      "y": -40,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 3,
+      "type": "basic",
+      "x": 138,
+      "y": -8,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 4,
+      "type": "basic",
+      "x": 87,
+      "y": -170,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 5,
+      "type": "basic",
+      "x": 317,
+      "y": -138,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 6,
+      "type": "basic",
+      "x": 357,
+      "y": 56,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 7,
+      "type": "basic",
+      "x": 169,
+      "y": 144,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 8,
+      "type": "basic",
+      "x": -143,
+      "y": -140,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 9,
+      "type": "basic",
+      "x": -324,
+      "y": -148,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 10,
+      "type": "basic",
+      "x": -385,
+      "y": 18,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 11,
+      "type": "basic",
+      "x": -228,
+      "y": -16,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 12,
+      "type": "basic",
+      "x": -274,
+      "y": 132,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 13,
+      "type": "basic",
+      "x": -463,
+      "y": 167,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 14,
+      "type": "basic",
+      "x": -296,
+      "y": 274,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 15,
+      "type": "basic",
+      "x": -42,
+      "y": 283,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 16,
+      "type": "basic",
+      "x": -506,
+      "y": 6,
+      "color": "rgb(255, 252, 56)"
+    },
+    {
+      "id": 17,
+      "type": "basic",
+      "x": -464,
+      "y": -123,
+      "color": "rgb(255, 252, 56)"
+    }
   ],
   "edges": [
-    { "id": 1, "type": "basic", "startId": 0, "endId": 1, "length": 2 },
-    { "id": 2, "type": "basic", "startId": 1, "endId": 2 },
-    { "id": 0, "type": "basic", "startId": 2, "endId": 0 },
+    {
+      "type": "basic",
+      "id": 1,
+      "startId": 0,
+      "endId": 1,
+      "length": 2
+    },
+    {
+      "type": "basic",
+      "id": 2,
+      "startId": 1,
+      "endId": 2,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 0,
+      "startId": 2,
+      "endId": 0,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 3,
+      "startId": 10,
+      "endId": 12,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 4,
+      "startId": 10,
+      "endId": 13,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 5,
+      "startId": 10,
+      "endId": 16,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 6,
+      "startId": 10,
+      "endId": 17,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 7,
+      "startId": 10,
+      "endId": 9,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 8,
+      "startId": 10,
+      "endId": 11,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 9,
+      "startId": 12,
+      "endId": 1,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 10,
+      "startId": 11,
+      "endId": 2,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 11,
+      "startId": 8,
+      "endId": 2,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 12,
+      "startId": 14,
+      "endId": 1,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 13,
+      "startId": 12,
+      "endId": 14,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 14,
+      "startId": 1,
+      "endId": 15,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 15,
+      "startId": 0,
+      "endId": 7,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 16,
+      "startId": 0,
+      "endId": 3,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 17,
+      "startId": 4,
+      "endId": 2,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 18,
+      "startId": 4,
+      "endId": 5,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 19,
+      "startId": 6,
+      "endId": 7,
+      "length": 1
+    },
+    {
+      "type": "basic",
+      "id": 20,
+      "startId": 5,
+      "endId": 6,
+      "length": 1
+    }
   ],
   "agents": [
-    { "id": 1, "type": "traveler", "nodeId": 0, "travelTime": 1 },
-    { "id": 2, "type": "traveler", "nodeId": 1, "travelTime": 1 },
-    { "id": 0, "type": "traveler", "nodeId": 2 }
+    {
+      "type": "path_traveler",
+      "id": 1,
+      "nodeId": 12
+    },
+    {
+      "type": "traveler",
+      "id": 2,
+      "nodeId": 8
+    },
+    {
+      "type": "traveler",
+      "id": 0,
+      "nodeId": 0
+    }
   ]
 }
