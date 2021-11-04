@@ -88,11 +88,10 @@ export default class Traveler {
    * @param {Edge} edge - Valid edge, by which travel will proceed. Should be attached to current node of the traveler
    */
   travel(edge) {
-    let canTravel = this.destinationNode !== null;
-    if (edge.start === this.curNode) this.destinationNode = edge.end;
-    else if (edge.end === this.curNode) this.destinationNode = edge.start;
-    else canTravel = false;
-    if (!canTravel) {
+    console.log(edge);
+    this.destinationNode = edge.getOtherNode(this.curNode?.id);
+
+    if (!this.destinationNode) {
         console.warn('cannot start travel');
     }
     this.travelStarted = new Date();

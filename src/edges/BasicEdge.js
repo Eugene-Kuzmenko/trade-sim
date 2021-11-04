@@ -53,6 +53,17 @@ export default class BasicEdge {
       length: this.length,
     }
   }
+
+  /**
+   * Returns node, that is on opposite end of an edge to node of your choice
+   * If node isn't attached to this edge, returns null
+   * @param {id} nodeId - Id of the node you're at
+   */
+  getOtherNode(nodeId) {
+    if (this.start.id === nodeId) return this.end;
+    if (this.end.id === nodeId) return this.start;
+    return null;
+  }
 }
 
 /**
