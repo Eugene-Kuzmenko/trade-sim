@@ -283,12 +283,12 @@
       "nodeId": 12
     },
     {
-      "type": "traveler",
+      "type": "path_traveler",
       "id": 2,
       "nodeId": 8
     },
     {
-      "type": "traveler",
+      "type": "path_traveler",
       "id": 0,
       "nodeId": 0
     }

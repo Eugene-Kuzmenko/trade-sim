@@ -6,6 +6,7 @@ import { StrokeTypes } from './render/enums';
 import Graph from './Graph';
 import { Agent } from 'https';
 import { AgentType } from './agents';
+import {breathFirstSearch} from "./path_finding";
 
 /**
  * Simulation engine
@@ -15,9 +16,15 @@ export default class Engine {
     this.renderer = new Renderer(doc, width, height, ['edges', 'nodes', 'agents']);
     this.doc = doc;
     this.graph = Graph.create(graph);
-    const agent = this.graph.getAgentById(1);
-    const path = [3, 8, 10, 17, 18, 20].map(id => this.graph.getEdgeById(id));
-    agent.travelEdgePath(path);
+    const sendAgentTo = (agentId, nodeId) => {
+      const agent = this.graph.getAgentById(agentId);
+      agent.travelEdgePath(breathFirstSearch(agent.curNode, nodeId))
+    }
+
+    sendAgentTo(0, 6);
+    sendAgentTo(1, 16);
+    sendAgentTo(2, 5);
+    // const path = [3, 8, 10, 17, 18, 20].map(id => this.graph.getEdgeById(id));
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
   }

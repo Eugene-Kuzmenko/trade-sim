@@ -88,7 +88,6 @@ export default class Traveler {
    * @param {Edge} edge - Valid edge, by which travel will proceed. Should be attached to current node of the traveler
    */
   travel(edge) {
-    console.log(edge);
     this.destinationNode = edge.getOtherNode(this.curNode?.id);
 
     if (!this.destinationNode) {
