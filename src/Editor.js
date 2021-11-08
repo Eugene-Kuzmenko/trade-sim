@@ -16,15 +16,24 @@ export default class Editor {
   }
 
   handleAddNodeButtonClick() {
-    this.mode = Modes.ADD_NODE;
+    this.setMode(Modes.ADD_NODE);
   }
   
   handleAddEdgeButtonClick() {
-    this.mode = Modes.ADD_EDGE;
+    this.setMode(Modes.ADD_EDGE);
   }
 
   handleAddAgentButtonClick() {
-    this.mode = Modes.ADD_AGENT;
+    this.setMode(Modes.ADD_AGENT);
+  }
+
+  handleSetAgentPath() {
+    this.setMode(Modes.SET_AGENT_PATH);
+  }
+
+  setMode(mode) {
+    this.mode = mode;
+    this.selectedNode = null;
   }
   
   async handleLoadGraphFileChange(event) {
@@ -37,6 +46,18 @@ export default class Editor {
 
   handleSaveGraphButtonClick(document, fileName) {
     saveJsonFile(document, this.handlers.onSaveGraph(), fileName)
+  }
+
+  _withSelectedNode(event, callback) {
+    const point = getOffCenterMouseCoord(event);
+    if (this.selectedNode == null) {
+      // Selecting first node
+      this.selectedNode = this.handlers.onSelectNode(point.x, point.y);
+    } else {
+      callback(this.selectedNode, point)
+      // Resetting selected node to be able to make new connection
+      this.selectedNode = null;
+    }
   }
 
   /**
@@ -54,15 +75,9 @@ export default class Editor {
             break;
           }
           case Modes.ADD_EDGE: {
-            const point = getOffCenterMouseCoord(event);
-            if (this.selectedNode == null) {
-              // Selecting first node
-              this.selectedNode = this.handlers.onSelectNode(point.x, point.y);
-            } else {
-              this.handlers.onAddEdge(this.selectedNode, point.x, point.y);
-              // Resetting selected node to be able to make new connection
-              this.selectedNode = null;
-            }
+            this._withSelectedNode(event, (node, point) => {
+              this.handlers.onAddEdge(node, point.x, point.y);
+            })
             break;
           }
           case Modes.ADD_AGENT: {
@@ -70,6 +85,15 @@ export default class Editor {
             const nodeId = this.handlers.onSelectNode(point.x, point.y);
             if (!nodeId) break;
             this.handlers.onAddAgent(nodeId);
+            break;
+          }
+          case Modes.SET_AGENT_PATH: {
+            this._withSelectedNode(event, (startNode, point) => {
+              this.handlers.onSetAgentPath(startNode, point.x, point.y)
+            })
+            const point = getOffCenterMouseCoord(event);
+            const nodeId = this.handlers.onSelectNode(point.x, point.y);
+            if (!nodeId) break;
           }
           default:
             break;
@@ -87,6 +111,7 @@ const Modes = {
   ADD_NODE: 'add_node',
   ADD_EDGE: 'add_edge',
   ADD_AGENT: 'add_agent',
+  SET_AGENT_PATH: 'set_agent_path',
 }
 
 const MouseButton = {
@@ -104,6 +129,16 @@ const MouseButton = {
  * @property {AddAgentHandler} onAddAgent
  * @property {LoadGraphHandler} onLoadGraph
  * @property {SaveGraphHandler} onSaveGraph
+ * @property {SetAgentPathHandler} onSetAgentPath
+ */
+
+
+/**
+ * Callback called then editor wants to make agent travel between 2 nodes
+ * @callback SetAgentPathHandler
+ * @param {unique} startNodeId - id of the origin node, where agent is located
+ * @param {number} screenX - x position of a mouse relative to the element center
+ * @param {number} screenY - y position of a mouse relative to the element center
  */
 
 /**

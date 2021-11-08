@@ -98,6 +98,10 @@ export default class Traveler {
     this._travelAngle = getVectorAngle(this.curNode, this.destinationNode);
   }
 
+  get isTraveling() {
+    return this.destinationNode !== null;
+  }
+
 
   /**
    * Update object's state

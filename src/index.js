@@ -21,6 +21,7 @@ function main() {
     onAddAgent: (nodeId) => engine.handleEditorAddAgent(nodeId),
     onLoadGraph: (graph) => engine.handleEditorLoadGraph(graph),
     onSaveGraph: () => engine.handleEditorSaveGraph(),
+    onSetAgentPath: (nodeId, x, y) => engine.handleEditorSetAgentPath(nodeId, x, y)
   })
 
   const toolbar = new Toolbar([
@@ -32,6 +33,9 @@ function main() {
     }),
     new Button('Add Agent', (event) => {
       editor.handleAddAgentButtonClick(event);
+    }),
+    new Button('Set AgentPath', (event) => {
+      editor.handleSetAgentPath(event);
     }),
     new FileLoad((event) => {
       editor.handleLoadGraphFileChange(event);

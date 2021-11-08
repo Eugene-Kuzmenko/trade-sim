@@ -7,6 +7,7 @@ import Graph from './Graph';
 import { Agent } from 'https';
 import { AgentType } from './agents';
 import {breathFirstSearch} from "./path_finding";
+import PathTraveler from "./agents/PathTraveler";
 
 /**
  * Simulation engine
@@ -97,6 +98,21 @@ export default class Engine {
   handleEditorSelectNode(offcenterX, offcenterY) {
     const node = this._getNodeByOffcenterCoord(offcenterX, offcenterY);
     return node?.id;
+  }
+
+  handleEditorSetAgentPath(nodeId, offcenterX, offcenterY) {
+    if (nodeId == null) return;
+    let foundAgent;
+    for (let agent of this.graph.agents) {
+      if (!agent.isTraveling && agent.curNode.id === nodeId) {
+        foundAgent = agent;
+        break;
+      }
+    }
+    if (foundAgent instanceof PathTraveler) {
+      const endNode = this._getNodeByOffcenterCoord(offcenterX, offcenterY)
+      foundAgent.travelEdgePath(breathFirstSearch(foundAgent.curNode, endNode.id));
+    }
   }
 
   /**
