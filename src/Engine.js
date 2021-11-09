@@ -170,14 +170,6 @@ export default class Engine {
 
     return true;
   }
-
-  // TODO: remove this temporary behaviour
-  _travelLoop(a) {
-    if (a.destinationNode == null && a.curNode.edges.length > 0) {
-      a.travel(pickAtRandom(a.curNode.edges));
-    }
-  }
-
   /**
    * Calculates center point of the area, occupied by nodes;
    * @returns {Point}

@@ -11,7 +11,7 @@ export default class ArrowSpaceShip extends Polygon {
    * @param {number} size - size of the polygon 
    * @param {CSSColor} color - color of the polygon
    * @param {CSSColor} lineColor - colors of the edges of the polygon
-   * @param {number} - width of the edges
+   * @param {number} lineWidth- width of the edges
    */
   constructor(x, y, size, color, lineColor, lineWidth) {
     const wingspan = Math.round(size * 5/7);
