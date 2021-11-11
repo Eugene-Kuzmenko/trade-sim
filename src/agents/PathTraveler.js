@@ -33,6 +33,7 @@ export default class PathTraveler extends Traveler {
    * @param {Edge[]} edgePath - sequence of edges to travel
    */
   travelEdgePath(edgePath) {
+    if (edgePath.length < 1) return;
     this.path = edgePath
     this.pathIndex = 0;
     this.travel(this.path[this.pathIndex])

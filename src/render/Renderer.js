@@ -31,21 +31,17 @@ export default class Renderer {
    * Moves viewport center to the specified position for rendering 
    * @param {number} x - viewport center x coordinate
    * @param {number} y - viewport center y coordinate
-   * @param {RenderingTask[]} renderingTasks - functions that would perform things to a layer while it's transformed
+   * @param {{ [string]: Shape[] }} shapesByLayer - Dictionary of shapes by layer
    */
-  withViewportCentered(x, y, renderingTasks) {
-    let halfViewWidth = this.width * 0.5;
-    let halfViewHeight = this.height * 0.5;
+  renderWithCamera(x, y, shapesByLayer) {
+    const shiftX = this.width * 0.5 - x;
+    const shiftY = this.height * 0.5 - y;
 
     for (let layer_name of this._layer_names) {
       const layer = this.layers[layer_name];
-      const renderingTask = renderingTasks[layer_name];
-      if (layer && renderingTask) {
-        layer.withTranslate(
-          halfViewWidth - x,
-          halfViewHeight - y,
-          renderingTask,
-        );
+      const shapes = shapesByLayer[layer_name];
+      if (layer && shapes) {
+        layer.renderTranslated(shiftX, shiftY, shapes);
       }
     }
   }

@@ -1,12 +1,11 @@
-import { BasicNode, NodeType } from './nodes';
+import { NodeType } from './nodes';
 import { EdgeType } from './edges';
-import { iterShapes, IdPool, pickAtRandom } from './utils';
+import { iterShapes } from './utils';
 import Renderer from './render';
 import { StrokeTypes } from './render/enums';
 import Graph from './Graph';
-import { Agent } from 'https';
 import { AgentType } from './agents';
-import {breathFirstSearch} from "./path_finding";
+import { breathFirstSearch } from "./path_finding";
 import PathTraveler from "./agents/PathTraveler";
 
 /**
@@ -25,7 +24,7 @@ export default class Engine {
     sendAgentTo(0, 6);
     sendAgentTo(1, 16);
     sendAgentTo(2, 5);
-    // const path = [3, 8, 10, 17, 18, 20].map(id => this.graph.getEdgeById(id));
+
     this.camera = {x: 0, y: 0};
     this._centerCameraOnNodes();
   }
@@ -87,7 +86,7 @@ export default class Engine {
       type: AgentType.TRAVELER,
       nodeId,
     });
-    this.renderAgents;  
+    this.renderAgents();
   }
 
   /**
@@ -206,10 +205,8 @@ export default class Engine {
    * Rerenders node layer
    */
   renderNodes() {
-    this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
-      nodes: layer => {
-        layer.render(iterShapes(this.graph.nodes));
-      },
+    this.renderer.renderWithCamera(this.camera.x, this.camera.y, {
+      nodes: iterShapes(this.graph.nodes)
     });
   }
 
@@ -217,20 +214,16 @@ export default class Engine {
    * Rerenders edge layer
    */
   renderEdges() {
-    this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
-      edges: layer => {
-        layer.render(iterShapes(this.graph.edges));
-      },
+    this.renderer.renderWithCamera(this.camera.x, this.camera.y, {
+      edges: iterShapes(this.graph.edges)
     });
   }
   /**
    * Rerenders agent layer
    */
   renderAgents() {
-    this.renderer.withViewportCentered(this.camera.x, this.camera.y, {
-      agents: layer => {
-        layer.render(iterShapes(this.graph.agents));
-      }
+    this.renderer.renderWithCamera(this.camera.x, this.camera.y, {
+      agents: iterShapes(this.graph.agents)
     });
   }
 

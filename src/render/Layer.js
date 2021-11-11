@@ -80,11 +80,11 @@ export default class Layer {
    * @param {number} y - shift y
    * @param {RenderingTask} renderingTask 
    */
-  withTranslate(x, y, renderingTask) {
+  renderTranslated(x, y, shapes) {
     this.clear();
     this.drawingContext.save();
     this.drawingContext.translate(x, y);
-    renderingTask(this);
+    this.render(shapes);
     this.drawingContext.restore();
   }
 
