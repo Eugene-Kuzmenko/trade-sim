@@ -3,12 +3,34 @@ body {
     width: 100vw;
     padding: 0;
     margin: 0;
-    display: flex;
+    display: grid;
     flex-direction: column;
     background: black;
+    grid-template-rows:
+        [toolbar] fit-content(10%)
+        [canvas] auto;
+    grid-template-columns:
+        [canvas] auto
+        [object-editor] 250px;
+
+    grid-template-areas:
+        "toolbar object-editor"
+        "canvas object-editor";
+
+}
+
+#toolbar {
+    grid-area: toolbar;
+    border: darkgrey 1px solid;
+}
+
+#object-editor {
+    grid-area: object-editor;
+    border: darkgrey 1px solid;
 }
 
 #canvas-container {
+    grid-area: canvas;
     flex: 1;
     display: flex;
     align-items: center;
@@ -22,4 +44,21 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+input {
+    background-color: black;
+    border: 2px darkgrey solid;
+}
+
+button {
+    background: grey;
+    border: 2px darkgrey solid;
+    color: white;
+    margin: 0;
+}
+
+button:active {
+    background: lightblue;
+    border-color: aqua;
 }
