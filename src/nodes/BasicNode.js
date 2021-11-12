@@ -1,5 +1,7 @@
 import { AnchoredCircle } from '../render/shapes';
 import NodeType from './NodeType';
+import {EditorFieldType} from "../editorFields";
+import { ShapeTypes } from '../render/enums';
 
 /**
  * Basic node on a graph
@@ -72,6 +74,29 @@ export default class BasicNode {
   }
 
   update() {}
+
+
+  get editorFields() {
+    return [
+      {
+        type: EditorFieldType.SHOW,
+        field: 'id',
+      },
+      {
+        type: EditorFieldType.OBJECT,
+        objectTypes: ShapeTypes,
+        label: 'Shape',
+        field: 'shape',
+      },
+      {
+        type: EditorFieldType.COORDINATE,
+        label: 'Position',
+        xField: 'x',
+        yField: 'y',
+      }
+    ]
+  }
+
 }
 
 const RADIUS = 20;
